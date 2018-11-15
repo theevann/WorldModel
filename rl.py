@@ -58,13 +58,6 @@ torch.backends.cudnn.benchmark = False
 
 ######################################################################
 
-
-
-
-
-
-
-
 env = "one_spec-l-h-k"
 env = "main"
 vis = visdom.Visdom(env=env, log_to_filename="log/" + env + ".log")
@@ -201,7 +194,7 @@ for e in range(nb_epochs):
         loss = criterion(output, batch_test_images)
         acc_test_loss += loss.item()
 
-    log_string('train_loss {:d} {:f} {:f}'.format(e, acc_train_loss, acc_test_loss))
+    log_string('Loss epoch {:d} | train {:f} | test {:f}'.format(e+1, acc_train_loss, acc_test_loss))
 
     if best_acc_train_loss is None or acc_train_loss < best_acc_train_loss:
         best_model_state = copy.deepcopy(model.state_dict())

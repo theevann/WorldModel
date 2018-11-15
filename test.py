@@ -26,21 +26,11 @@ from autoencoder import AutoEncoder, ConvAutoEncoder, ConvAutoEncoderDense
 
 ######################################################################
 
-# log_file = None
-log_file = open('train.log', 'w')
-
 def log_string(s, color = None):
     t = time.strftime("%Y-%m-%d_%H:%M:%S - ", time.localtime())
-
-    if log_file is not None:
-        log_file.write(t + s + '\n')
-        log_file.flush()
-
     if color is not None:
         s = colored(s, color)
-
     print(t + s)
-    sys.stdout.flush()
 
 ######################################################################
 
@@ -116,7 +106,7 @@ class World:
 
 vis = None
 
-vis = visdom.Visdom()
+vis = visdom.Visdom(log_to_filename="test.log")
 
 if vis.check_connection():
     log_string('Visdom server ' + vis.server + ':' + str(vis.port))
@@ -126,7 +116,7 @@ else:
 
 ######################################################################
 
-nb_frames = 50000
+nb_frames = 5
 world = World()
 train_images, train_actions = world.generate_batch(1)
 print(train_images.shape)
@@ -139,8 +129,11 @@ train_images = (train_images - train_mu) / train_std
 
 # batch_train_images = train_images[torch.arange(100, 500, 1).long()] * train_std + train_mu
 batch_train_images = train_images * train_std + train_mu
-np.save('out_images', batch_train_images.numpy())
+
+
+# np.save('out_images', batch_train_images.numpy())
 # vis.images(batch_train_images.cpu())
+vis.images(batch_train_images[2:4].cpu())
 # vis.images((batch_train_images[1:] - batch_train_images[:-1]).cpu())
 # vis.images((batch_train_images[5:] - batch_train_images[:-5]).cpu())
 

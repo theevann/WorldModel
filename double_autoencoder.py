@@ -36,7 +36,7 @@ def log_string(s, color=None):
 ######################################################################
 
 show_progress = True
-GPU = 0
+GPU = 1
 torch.cuda.device(GPU)
 
 random.seed(0)
@@ -147,7 +147,7 @@ for e in range(nb_epochs):
         loss = criterion(output, batch_test_images[shift:])
         acc_test_loss += loss.item()
 
-    log_string('train_loss {:d} {:f} {:f}'.format(e, acc_train_loss, acc_test_loss))
+    log_string('Loss epoch {:d} | train {:f} | test {:f}'.format(e+1, acc_train_loss, acc_test_loss))
 
     if best_acc_train_loss is None or acc_train_loss < best_acc_train_loss:
         best_model_state = (copy.deepcopy(model_low.state_dict()), copy.deepcopy(model_high.state_dict()))
