@@ -3,25 +3,24 @@ from vizdoom import *
 import random, time, sys
 
 import torch
+import torch.nn as nn
 import numpy as np
 import copy
-
-from torch import Tensor
-import torch.nn as nn
 
 from termcolor import colored
 
 ######################################################################
 
 from autoencoder import AutoEncoder, ConvAutoEncoder
+from world import World
 from spec import *
 
 ######################################################################
 
-# log_file = None
-log_file = open('train.log', 'w')
+log_file = None
+# log_file = open('train.log', 'w')
 
-def log_string(s, color = None):
+def log_string(s, color=None):
     t = time.strftime("%Y-%m-%d_%H:%M:%S - ", time.localtime())
 
     if log_file is not None:
@@ -49,72 +48,8 @@ torch.backends.cudnn.benchmark = True
 
 ######################################################################
 
-class World:
-    def __init__(self, nbots):
-        self.game = DoomGame()
-
-        self.game.set_window_visible(False)
-
-        # self.game.set_doom_scenario_path("freedoom2.wad")
-        self.game.set_doom_map("map04")
-
-        self.game.set_screen_resolution(ScreenResolution.RES_320X240)
-        self.game.set_screen_format(ScreenFormat.CRCGCB)  # This gives 3xHxW tensor
-        # self.game.set_depth_buffer_enabled(True)
-        self.game.set_render_hud(False)
-        self.game.set_render_crosshair(False)
-        self.game.set_render_messages(False)
-        self.game.set_render_screen_flashes(False)
-        self.game.set_render_weapon(False)
-        self.game.set_render_effects_sprites(False)
-
-        self.game.set_mode(Mode.PLAYER)
-
-        self.game.add_available_button(Button.TURN_LEFT)
-        self.game.add_available_button(Button.TURN_RIGHT)
-        self.game.add_available_button(Button.MOVE_FORWARD)
-
-        self.game.set_seed(0)  # DETERMINISTIC GAME !
-        self.game.init()
-
-        self.game.new_episode()
-
-        self.actions = [
-            ('turn_left',    [ True, False, False ]),
-            ('turn_right',   [ False, True, False ]),
-            ('move_forward', [ False, False, True ]),
-            ('stay_put',     [ False, False, False]),
-        ]
-
-        # Add bots
-        for i in range(nbots):
-            self.game.send_game_command("addbot")
-
-    def generate_batch(self, nb):
-        batch_images = Tensor(nb, self.game.get_screen_channels(), self.game.get_screen_height(), self.game.get_screen_width())
-        batch_actions = torch.LongTensor(nb)
-
-        for t in range(nb):
-            if t == 0 or random.random() < 0.1:
-                a = random.randrange(len(self.actions))
-            reward = self.game.make_action(self.actions[a][1])
-
-            state = self.game.get_state()
-
-            if self.game.is_episode_finished() or self.game.is_player_dead():
-                self.game.new_episode()
-                state = self.game.get_state()
-
-            # misc = state.game_variables
-            frame = torch.from_numpy(state.screen_buffer).float()
-            batch_images[t] = frame
-            batch_actions[t] = a
-
-        return batch_images, batch_actions
-
-######################################################################
-
-vis = visdom.Visdom()
+env = "double_spec-l-h-k"
+vis = visdom.Visdom(env=env, log_to_filename="log/" + env + ".log")
 
 if vis.check_connection():
     log_string('Visdom server ' + vis.server + ':' + str(vis.port))
@@ -131,7 +66,7 @@ world = World(nbots=5)
 train_images, train_actions = world.generate_batch(1)
 print('Image shape', train_images.shape)
 
-spec = spec_3
+spec = spec_4
 model_low = ConvAutoEncoder(spec['layer_specs_enc_low'], spec['layer_specs_dec_low'])
 model_high = ConvAutoEncoder(spec['layer_specs_enc_high'], spec['layer_specs_dec_high'])
 
@@ -157,16 +92,17 @@ model_low.cuda(GPU)
 model_high.cuda(GPU)
 
 # nb_frames, nb_epochs = 1000, 15
-nb_frames, nb_epochs = 2500, 50
-batch_size = 10
+# nb_frames, nb_epochs = 2500, 50
+nb_frames, nb_epochs = 5000, 100
+batch_size = 30
 shift = 2
 
 best_acc_train_loss = None
 
 log_string('Generating %d train images' % nb_frames)
 train_images, train_actions = world.generate_batch(nb_frames)
-log_string('Generating %d test images' % nb_frames)
-test_images, test_actions = world.generate_batch(nb_frames)
+log_string('Generating %d test images' % int(nb_frames / 5))
+test_images, test_actions = world.generate_batch(int(nb_frames / 5))
 
 train_mu, train_std = train_images.mean(), train_images.std()
 
@@ -179,7 +115,7 @@ log_string('Start training')
 for e in range(nb_epochs):
     acc_train_loss = 0.0
 
-    if show_progress and (e+1) % 10 == 0:
+    if show_progress and (e+1) % 5 == 0:
         # batch_images = train_images[torch.arange(100, 800, 100).long()].cuda(GPU)
         batch_images = train_images[torch.randint(0, nb_frames, (8,)).long()].cuda(GPU)
 
