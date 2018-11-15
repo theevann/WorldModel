@@ -1,2 +1,4 @@
 _*
 .nfs*
+log/
+*.ipynb*
