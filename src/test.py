@@ -43,12 +43,13 @@ class World:
     def __init__(self):
         self.game = DoomGame()
 
-        self.game.set_window_visible(False)
+        self.game.set_window_visible(True)
 
         # self.game.set_doom_scenario_path("freedoom2.wad")
         self.game.set_doom_map("map04")
 
-        self.game.set_screen_resolution(ScreenResolution.RES_320X240)
+        self.game.set_screen_resolution(ScreenResolution.RES_160X120)
+        # self.game.set_screen_resolution(ScreenResolution.RES_320X240)
         self.game.set_screen_format(ScreenFormat.CRCGCB) # This gives 3xHxW tensor
         # self.game.set_depth_buffer_enabled(True)
         self.game.set_render_hud(False)
@@ -106,7 +107,8 @@ class World:
 
 vis = None
 
-vis = visdom.Visdom(log_to_filename="test.log")
+vis = visdom.Visdom()
+# vis = visdom.Visdom(log_to_filename="test.log")
 
 if vis.check_connection():
     log_string('Visdom server ' + vis.server + ':' + str(vis.port))
@@ -116,7 +118,7 @@ else:
 
 ######################################################################
 
-nb_frames = 5
+nb_frames = 500
 world = World()
 train_images, train_actions = world.generate_batch(1)
 print(train_images.shape)

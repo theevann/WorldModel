@@ -5,7 +5,8 @@ from vizdoom import *
 
 
 class World:
-    def __init__(self, nbots):
+    def __init__(self, nbots, skip=False):
+        self.skip = skip
         self.game = DoomGame()
 
         self.game.set_window_visible(False)
@@ -48,21 +49,30 @@ class World:
     def generate_batch(self, nb):
         batch_images = torch.Tensor(nb, self.game.get_screen_channels(), self.game.get_screen_height(), self.game.get_screen_width())
         batch_actions = torch.LongTensor(nb)
+        c = 0
 
         for t in tqdm(range(nb)):
-            if t == 0 or random.random() < 0.1:
-                a = random.randrange(len(self.actions))
-            reward = self.game.make_action(self.actions[a][1])
+            while True:
+                if t == 0 or random.random() < 0.1:
+                    a = random.randrange(len(self.actions))
+                reward = self.game.make_action(self.actions[a][1])
 
-            state = self.game.get_state()
-
-            if self.game.is_episode_finished() or self.game.is_player_dead():
-                self.game.new_episode()
                 state = self.game.get_state()
 
-            # misc = state.game_variables
-            frame = torch.from_numpy(state.screen_buffer).float()
-            batch_images[t] = frame
-            batch_actions[t] = a
+                if self.game.is_episode_finished() or self.game.is_player_dead():
+                    self.game.new_episode()
+                    state = self.game.get_state()
+
+                # misc = state.game_variables
+                frame = torch.from_numpy(state.screen_buffer).float()
+                batch_images[t] = frame
+                batch_actions[t] = a
+
+                if not self.skip or (t == 0) or ((batch_images[t] - batch_images[t-1]).sum() != 0):
+                    break
+                c += 1
+                # print("Skipped image %d" % c, end='\n')
+
+        print("Skipped %d images" % c, end='\n')
 
         return batch_images, batch_actions

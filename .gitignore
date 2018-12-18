@@ -2,3 +2,4 @@ _*
 .nfs*
 log/
 *.ipynb*
+src/data/

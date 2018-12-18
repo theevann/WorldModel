@@ -1,0 +1,162 @@
+2018-12-12_16:11:38 - Visdom server http://localhost:8097
+2018-12-12_16:11:39 - ConvEncoderDense(
+  (_encoder): Sequential(
+    (0): Conv2d(3, 32, kernel_size=(8, 8), stride=(4, 4))
+    (1): ReLU(inplace)
+    (2): Conv2d(32, 64, kernel_size=(6, 6), stride=(3, 3))
+    (3): ReLU(inplace)
+    (4): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2))
+    (5): ReLU(inplace)
+  )
+)
+2018-12-12_16:11:39 - Dense(
+  (_dense): Sequential(
+    (0): Flatten()
+    (1): Linear(in_features=11264, out_features=1000, bias=True)
+    (2): ReLU(inplace)
+    (3): Linear(in_features=1000, out_features=100, bias=True)
+    (4): ReLU(inplace)
+    (5): Linear(in_features=100, out_features=1000, bias=True)
+    (6): ReLU(inplace)
+    (7): Linear(in_features=1000, out_features=11264, bias=True)
+    (8): ReLU(inplace)
+    (9): Unflatten()
+  )
+)
+2018-12-12_16:11:39 - ConvDecoderDense(
+  (_decoder): Sequential(
+    (0): ConvTranspose2d(11264, 256, kernel_size=(3, 4), stride=(3, 3))
+    (1): ReLU(inplace)
+    (2): ConvTranspose2d(256, 128, kernel_size=(3, 3), stride=(3, 3))
+    (3): ReLU(inplace)
+    (4): ConvTranspose2d(128, 64, kernel_size=(3, 3), stride=(3, 3), output_padding=(1, 2))
+    (5): ReLU(inplace)
+    (6): ConvTranspose2d(64, 32, kernel_size=(4, 4), stride=(2, 2), output_padding=(1, 1))
+    (7): ReLU(inplace)
+    (8): ConvTranspose2d(32, 3, kernel_size=(8, 8), stride=(4, 4))
+  )
+)
+2018-12-12_16:11:39 - ConvEncoder(
+  (_encoder): Sequential(
+    (0): Conv2d(3, 32, kernel_size=(8, 8), stride=(4, 4))
+    (1): ReLU(inplace)
+    (2): Conv2d(32, 64, kernel_size=(4, 4), stride=(2, 2))
+    (3): ReLU(inplace)
+    (4): Conv2d(64, 64, kernel_size=(3, 3), stride=(3, 3))
+    (5): ReLU(inplace)
+  )
+)
+2018-12-12_16:11:39 - ConvDecoder(
+  (_decoder): Sequential(
+    (0): ConvTranspose2d(64, 64, kernel_size=(3, 3), stride=(3, 3), output_padding=(1, 2))
+    (1): ReLU(inplace)
+    (2): ConvTranspose2d(64, 32, kernel_size=(4, 4), stride=(2, 2), output_padding=(1, 1))
+    (3): ReLU(inplace)
+    (4): ConvTranspose2d(32, 3, kernel_size=(8, 8), stride=(4, 4))
+  )
+)
+2018-12-12_16:11:39 - Low embedding dimension is 100
+2018-12-12_16:11:39 - High embedding dimension is 64 x 9 x 12
+2018-12-12_16:11:43 - Generating 50000 train images
+2018-12-12_16:16:57 - Generating 10000 test images
+2018-12-12_16:18:34 - Start training
+2018-12-12_16:20:38 - Loss epoch 1 | train 0.369868 | test 0.374651
+2018-12-12_16:23:02 - Loss epoch 2 | train 0.345259 | test 0.586744
+2018-12-12_16:25:06 - Loss epoch 3 | train 0.337414 | test 0.426720
+2018-12-12_16:27:08 - Loss epoch 4 | train 0.322842 | test 0.374355
+2018-12-12_16:29:13 - Loss epoch 5 | train 0.326984 | test 0.421379
+2018-12-12_16:31:15 - Loss epoch 6 | train 0.318886 | test 0.399313
+2018-12-12_16:33:17 - Loss epoch 7 | train 0.319503 | test 0.390905
+2018-12-12_16:35:20 - Loss epoch 8 | train 0.317934 | test 0.387205
+2018-12-12_16:37:24 - Loss epoch 9 | train 0.319570 | test 0.406087
+2018-12-12_16:39:30 - Loss epoch 10 | train 0.309478 | test 0.487881
+2018-12-12_16:41:36 - Loss epoch 11 | train 0.313783 | test 0.387585
+2018-12-12_16:43:43 - Loss epoch 12 | train 0.312630 | test 0.340933
+2018-12-12_16:45:47 - Loss epoch 13 | train 0.302691 | test 0.337669
+2018-12-12_16:47:51 - Loss epoch 14 | train 0.302117 | test 0.338659
+2018-12-12_16:49:55 - Loss epoch 15 | train 0.300886 | test 0.334226
+2018-12-12_16:51:58 - Loss epoch 16 | train 0.299387 | test 0.376763
+2018-12-12_16:54:01 - Loss epoch 17 | train 0.301805 | test 0.361166
+2018-12-12_16:56:04 - Loss epoch 18 | train 0.301765 | test 0.347788
+2018-12-12_16:58:07 - Loss epoch 19 | train 0.299832 | test 0.367589
+2018-12-12_17:00:11 - Loss epoch 20 | train 0.303260 | test 0.361671
+2018-12-12_17:02:13 - Loss epoch 21 | train 0.301792 | test 0.359113
+2018-12-12_17:04:16 - Loss epoch 22 | train 0.300232 | test 0.373533
+2018-12-12_17:06:18 - Loss epoch 23 | train 0.302777 | test 0.380005
+2018-12-12_17:08:19 - Loss epoch 24 | train 0.300174 | test 0.367027
+2018-12-12_17:10:18 - Loss epoch 25 | train 0.298501 | test 0.334713
+2018-12-12_17:12:15 - Loss epoch 26 | train 0.301797 | test 0.347058
+2018-12-12_17:14:13 - Loss epoch 27 | train 0.298102 | test 0.332389
+2018-12-12_17:16:10 - Loss epoch 28 | train 0.297145 | test 0.334795
+2018-12-12_17:18:08 - Loss epoch 29 | train 0.296372 | test 0.330346
+2018-12-12_17:20:06 - Loss epoch 30 | train 0.296346 | test 0.327630
+2018-12-12_17:22:03 - Loss epoch 31 | train 0.295390 | test 0.329093
+2018-12-12_17:24:01 - Loss epoch 32 | train 0.295392 | test 0.334628
+2018-12-12_17:25:59 - Loss epoch 33 | train 0.297442 | test 0.351480
+2018-12-12_17:27:56 - Loss epoch 34 | train 0.297728 | test 0.334942
+2018-12-12_17:29:55 - Loss epoch 35 | train 0.295995 | test 0.326220
+2018-12-12_17:31:52 - Loss epoch 36 | train 0.294401 | test 0.324788
+2018-12-12_17:33:50 - Loss epoch 37 | train 0.295182 | test 0.328491
+2018-12-12_17:35:47 - Loss epoch 38 | train 0.292021 | test 0.323151
+2018-12-12_17:37:46 - Loss epoch 39 | train 0.291256 | test 0.323434
+2018-12-12_17:39:45 - Loss epoch 40 | train 0.289966 | test 0.320967
+2018-12-12_17:41:43 - Loss epoch 41 | train 0.286147 | test 0.324112
+2018-12-12_17:43:40 - Loss epoch 42 | train 0.282935 | test 0.317938
+2018-12-12_17:45:37 - Loss epoch 43 | train 0.278172 | test 0.335909
+2018-12-12_17:47:35 - Loss epoch 44 | train 0.274399 | test 0.322138
+2018-12-12_17:49:34 - Loss epoch 45 | train 0.287240 | test 0.327517
+2018-12-12_17:51:31 - Loss epoch 46 | train 0.293659 | test 0.318617
+2018-12-12_17:53:29 - Loss epoch 47 | train 0.280205 | test 0.306855
+2018-12-12_17:55:26 - Loss epoch 48 | train 0.282697 | test 0.321840
+2018-12-12_17:57:24 - Loss epoch 49 | train 0.281145 | test 0.315054
+2018-12-12_17:59:23 - Loss epoch 50 | train 0.294269 | test 0.326170
+2018-12-12_18:01:21 - Loss epoch 51 | train 0.274366 | test 0.307347
+2018-12-12_18:03:19 - Loss epoch 52 | train 0.270298 | test 0.321051
+2018-12-12_18:05:16 - Loss epoch 53 | train 0.268514 | test 0.301255
+2018-12-12_18:07:12 - Loss epoch 54 | train 0.292550 | test 0.304329
+2018-12-12_18:09:11 - Loss epoch 55 | train 0.263151 | test 0.296044
+2018-12-12_18:11:08 - Loss epoch 56 | train 0.261534 | test 0.305711
+2018-12-12_18:13:05 - Loss epoch 57 | train 0.263793 | test 0.295589
+2018-12-12_18:15:01 - Loss epoch 58 | train 0.258633 | test 0.292235
+2018-12-12_18:16:58 - Loss epoch 59 | train 0.257329 | test 0.306018
+2018-12-12_18:18:56 - Loss epoch 60 | train 0.259867 | test 0.294098
+2018-12-12_18:20:52 - Loss epoch 61 | train 0.257099 | test 0.295003
+2018-12-12_18:22:49 - Loss epoch 62 | train 0.261987 | test 0.494804
+2018-12-12_18:24:45 - Loss epoch 63 | train 0.279491 | test 0.295088
+2018-12-12_18:26:42 - Loss epoch 64 | train 0.256096 | test 0.290254
+2018-12-12_18:28:41 - Loss epoch 65 | train 0.267168 | test 0.293611
+2018-12-12_18:30:39 - Loss epoch 66 | train 0.247688 | test 0.292303
+2018-12-12_18:32:37 - Loss epoch 67 | train 0.248582 | test 0.292462
+2018-12-12_18:34:34 - Loss epoch 68 | train 0.251082 | test 0.316509
+2018-12-12_18:36:30 - Loss epoch 69 | train 0.250778 | test 0.293970
+2018-12-12_18:38:29 - Loss epoch 70 | train 0.252809 | test 0.292111
+2018-12-12_18:40:25 - Loss epoch 71 | train 0.245185 | test 0.825181
+2018-12-12_18:42:21 - Loss epoch 72 | train 0.255504 | test 0.289548
+2018-12-12_18:44:18 - Loss epoch 73 | train 0.259686 | test 0.327496
+2018-12-12_18:46:14 - Loss epoch 74 | train 0.248134 | test 0.311125
+2018-12-12_18:48:13 - Loss epoch 75 | train 0.246562 | test 0.293354
+2018-12-12_18:50:11 - Loss epoch 76 | train 0.250253 | test 0.291237
+2018-12-12_18:52:09 - Loss epoch 77 | train 0.244964 | test 0.292180
+2018-12-12_18:54:06 - Loss epoch 78 | train 0.254430 | test 0.289796
+2018-12-12_18:56:02 - Loss epoch 79 | train 0.245377 | test 0.295141
+2018-12-12_18:58:01 - Loss epoch 80 | train 0.249672 | test 0.312645
+2018-12-12_18:59:58 - Loss epoch 81 | train 0.244928 | test 0.295590
+2018-12-12_19:01:56 - Loss epoch 82 | train 0.251707 | test 0.314223
+2018-12-12_19:03:52 - Loss epoch 83 | train 0.244386 | test 0.289048
+2018-12-12_19:05:49 - Loss epoch 84 | train 0.249928 | test 0.301562
+2018-12-12_19:07:48 - Loss epoch 85 | train 0.248995 | test 0.306995
+2018-12-12_19:09:45 - Loss epoch 86 | train 0.243457 | test 0.302293
+2018-12-12_19:11:44 - Loss epoch 87 | train 0.241615 | test 0.287008
+2018-12-12_19:13:40 - Loss epoch 88 | train 0.249887 | test 0.296029
+2018-12-12_19:15:38 - Loss epoch 89 | train 0.244515 | test 0.298844
+2018-12-12_19:17:36 - Loss epoch 90 | train 0.253664 | test 0.307785
+2018-12-12_19:19:33 - Loss epoch 91 | train 0.247184 | test 0.305994
+2018-12-12_19:21:30 - Loss epoch 92 | train 0.240243 | test 0.296109
+2018-12-12_19:23:27 - Loss epoch 93 | train 0.261823 | test 0.300413
+2018-12-12_19:25:24 - Loss epoch 94 | train 0.238618 | test 0.291207
+2018-12-12_19:27:23 - Loss epoch 95 | train 0.239541 | test 0.296559
+2018-12-12_19:29:19 - Loss epoch 96 | train 0.247668 | test 0.315349
+2018-12-12_19:31:17 - Loss epoch 97 | train 0.238925 | test 0.294137
+2018-12-12_19:33:13 - Loss epoch 98 | train 0.235264 | test 0.300554
+2018-12-12_19:35:10 - Loss epoch 99 | train 0.236119 | test 0.299207
+2018-12-12_19:37:09 - Loss epoch 100 | train 0.241757 | test 0.295068

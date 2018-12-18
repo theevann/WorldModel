@@ -1,4 +1,5 @@
 import visdom
+from vizdoom import *
 import random, time, sys
 
 import torch
@@ -10,16 +11,16 @@ from termcolor import colored
 
 ######################################################################
 
-from autoencoder import ConvAutoEncoder, ConvAutoEncoderDense
+from autoencoder import AutoEncoder, ConvAutoEncoder
 from world import World
 from spec import *
 
 ######################################################################
 
-# log_file = None
-log_file = open('train.log', 'w')
+log_file = None
+# log_file = open('train.log', 'w')
 
-def log_string(s, color = None):
+def log_string(s, color=None):
     t = time.strftime("%Y-%m-%d_%H:%M:%S - ", time.localtime())
 
     if log_file is not None:
@@ -47,7 +48,7 @@ torch.backends.cudnn.benchmark = True
 
 ######################################################################
 
-env = "double_spec5-l100d-h6912-50k"
+env = "double_spec-l-h-k"
 vis = visdom.Visdom(env=env, log_to_filename="log/" + env + ".log")
 
 if vis.check_connection():
@@ -63,24 +64,22 @@ assert torch.cuda.is_available(), 'We need a GPU to run this.'
 world = World(nbots=5)
 
 train_images, train_actions = world.generate_batch(1)
-image_shape = train_images.shape[1:]
 print('Image shape', train_images.shape)
 
-spec = spec_5
-model_low = ConvAutoEncoderDense(spec['layer_specs_enc_low'], spec['layer_specs_dec_low'], spec['layer_specs_dense'], image_shape)
+spec = spec_4
+model_low = ConvAutoEncoder(spec['layer_specs_enc_low'], spec['layer_specs_dec_low'])
 model_high = ConvAutoEncoder(spec['layer_specs_enc_high'], spec['layer_specs_dec_high'])
 
 def apply_models(batch, shift=0):
     return model_low(batch[shift:]) + model_high(batch[:((-shift-1) % len(batch))+1])
 
 log_string(str(model_low.encoder))
-log_string(str(model_low.dense))
 log_string(str(model_low.decoder))
 log_string(str(model_high.encoder))
 log_string(str(model_high.decoder))
 
 embed_shape = model_low.get_embed_shape(train_images.shape[1:])
-log_string('Low embedding dimension is ' + str(embed_shape))
+log_string('Low embedding dimension is ' + str(embed_shape[0]) + ' x ' + str(embed_shape[1]) + ' x ' + str(embed_shape[2]))
 embed_shape = model_high.get_embed_shape(train_images.shape[1:])
 log_string('High embedding dimension is ' + str(embed_shape[0]) + ' x ' + str(embed_shape[1]) + ' x ' + str(embed_shape[2]))
 
@@ -94,8 +93,8 @@ model_high.cuda(GPU)
 
 # nb_frames, nb_epochs = 1000, 15
 # nb_frames, nb_epochs = 2500, 50
-nb_frames, nb_epochs = 50000, 100
-batch_size = 50
+nb_frames, nb_epochs = 5000, 100
+batch_size = 30
 shift = 2
 
 best_acc_train_loss = None
@@ -153,13 +152,6 @@ for e in range(nb_epochs):
     if best_acc_train_loss is None or acc_train_loss < best_acc_train_loss:
         best_model_state = (copy.deepcopy(model_low.state_dict()), copy.deepcopy(model_high.state_dict()))
         best_acc_train_loss = acc_train_loss
-    # else:
-    #     model_low.load_state_dict(best_model_state[0])
-    #     model_high.load_state_dict(best_model_state[1])
-    #     lr *= 0.9
-    #     log_string('set_lr {:f}'.format(lr))
-    #     for param_group in optimizer.param_groups:
-    #         param_group['lr'] = lr
 
 
 ######################################################################
