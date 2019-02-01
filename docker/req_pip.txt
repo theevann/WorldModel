@@ -2,6 +2,7 @@ certifi==2018.10.15
 cffi==1.11.5
 chardet==3.0.4
 idna==2.7
+ipdb
 mkl-fft==1.0.6
 mkl-random==1.0.1
 numpy==1.15.3
@@ -13,6 +14,7 @@ requests==2.20.0
 scipy==1.1.0
 scikit-image==0.14.1
 six==1.11.0
+tensorboardX
 termcolor==1.1.0
 torchfile==0.1.0
 torchvision==0.2.1

@@ -43,7 +43,7 @@ class World:
     def __init__(self):
         self.game = DoomGame()
 
-        self.game.set_window_visible(True)
+        self.game.set_window_visible(False)
 
         # self.game.set_doom_scenario_path("freedoom2.wad")
         self.game.set_doom_map("map04")
@@ -60,6 +60,7 @@ class World:
         self.game.set_render_effects_sprites(False)
 
         self.game.set_mode(Mode.PLAYER)
+        self.game.set_labels_buffer_enabled(True)
 
         self.game.add_available_button(Button.TURN_LEFT)
         self.game.add_available_button(Button.TURN_RIGHT)
@@ -93,6 +94,10 @@ class World:
             reward = self.game.make_action(self.actions[a][1])
 
             state = self.game.get_state()
+            labels = state.labels_buffer
+
+            # import ipdb; ipdb.set_trace()
+
             if state is None:
                 self.game.new_episode()
                 state = self.game.get_state()
@@ -135,7 +140,7 @@ batch_train_images = train_images * train_std + train_mu
 
 # np.save('out_images', batch_train_images.numpy())
 # vis.images(batch_train_images.cpu())
-vis.images(batch_train_images[2:4].cpu())
+# vis.images(batch_train_images[2:4].cpu())
 # vis.images((batch_train_images[1:] - batch_train_images[:-1]).cpu())
 # vis.images((batch_train_images[5:] - batch_train_images[:-5]).cpu())
 

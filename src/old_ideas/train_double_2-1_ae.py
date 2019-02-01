@@ -24,10 +24,13 @@ def log_string(s, color=None):
     print(t + s)
     sys.stdout.flush()
 
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
 ######################################################################
 
 show_progress = True
-GPU = 3
+GPU = 2
 DATAPARALLEL = False
 
 assert torch.cuda.is_available(), 'We need a GPU to run this.'
@@ -43,7 +46,7 @@ torch.backends.cudnn.benchmark = True
 ######################################################################
 
 env = "main"
-# env = "double_spec5-l100d-h6912-50k"
+env = "double_2-1_s1"
 vis = visdom.Visdom(env=env, log_to_filename="log/" + env + ".log")
 
 if vis.check_connection():
@@ -98,6 +101,7 @@ print('Image shape', train_images.shape)
 
 model = ConvAutoEncoderDense_v2(image_shape, 300, 100, 200)
 log_string(str(model))
+log_string("Number of parameters %d" % count_parameters(model))
 
 embed_shape = model.get_embed_shape()
 log_string('Embedding dimensions are ' + str(embed_shape))
@@ -114,22 +118,22 @@ if DATAPARALLEL:
 
 nb_frames, nb_epochs = 50000, 1000
 batch_size = 100
-shift = 2
+shift = 1
 
-wu_nb_frames, wu_nb_epochs = 1000, 100
+wu_nb_frames, wu_nb_epochs = 200, 100
 wu_batch_size = 200
 
 best_acc_train_loss = None
 
 log_string('Generating %d train images' % nb_frames)
-# train_images, train_actions = world.generate_batch(nb_frames)
+train_images, train_actions = world.generate_batch(nb_frames)
 # torch.save((train_images, train_actions), "data/train")
-(train_images, train_actions) = torch.load("data/train")
+# (train_images, train_actions) = torch.load("data/train")
 
 log_string('Generating %d test images' % int(nb_frames / 5))
-# test_images, test_actions = world.generate_batch(int(nb_frames / 5))
+test_images, test_actions = world.generate_batch(int(nb_frames / 5))
 # torch.save((test_images, test_actions), "data/test")
-(test_images, test_actions) = torch.load("data/test")
+# (test_images, test_actions) = torch.load("data/test")
 
 train_mu, train_std = train_images.mean(), train_images.std()
 

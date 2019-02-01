@@ -2,4 +2,7 @@ _*
 .nfs*
 log/
 *.ipynb*
+notebooks/data/
 src/data/
+src/trained_models/
+src/tb_logs/

@@ -6,11 +6,13 @@ import json
 import os
 
 
+server = "http://localhost"
+
 # SAVING
 
 def create_log_at(file_path, current_env, new_env=None):
     new_env = current_env if new_env is None else new_env
-    vis = visdom.Visdom(env=current_env)
+    vis = visdom.Visdom(env=current_env, server=server)
 
     data = json.loads(vis.get_window_data())
     if len(data) == 0:
@@ -52,7 +54,7 @@ def create_log(current_env, new_env=None):
 # LOADING
 
 def load_log_at(path):
-    visdom.Visdom().replay_log(path)
+    visdom.Visdom(server=server).replay_log(path)
 
 
 def load_log(env):
@@ -63,7 +65,7 @@ def load_log(env):
 def load_all_log():
     dir_path = os.getcwd() + '/log/'
     logs = os.listdir(dir_path)
-    vis = visdom.Visdom()
+    vis = visdom.Visdom(server=server)
     for log in logs:
         vis.replay_log(dir_path + log)
 
@@ -75,7 +77,11 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--save', type=str, help='env_name', default='')
     parser.add_argument('-l', '--load', type=str, help='env_name', default='', nargs="?")
     parser.add_argument('-f', '--file', type=str, help='path_to_log_file', default='')
+    parser.add_argument('-a', '--address', type=str, help='server_address', default='')
     args = parser.parse_args()
+
+    if args.address is not '':
+        server = args.address
 
     if args.save is not '':
         if args.file is not '':

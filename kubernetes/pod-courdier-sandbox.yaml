@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: courdier-sandbox
+  labels:
+    user: courdier
+spec:
+  restartPolicy: Never
+  securityContext:
+    runAsUser: 192613
+    fsGroup: 11169
+  containers:
+  - name:  ubuntu-gpu
+    image: ic-registry.epfl.ch/mlo/courdier_experiments
+    command: ["sleep", "infinity"]
+    resources:
+      limits:
+        nvidia.com/gpu: 1 # requesting 1 GPU
+    volumeMounts:
+      - mountPath: /mlodata1
+        name: mlodata1
+  volumes:
+    - name: mlodata1
+      persistentVolumeClaim:
+        claimName: pv-mlodata1
